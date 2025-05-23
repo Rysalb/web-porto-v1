@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Rysa Laksana's Portfolio - Fresh Graduate Computer Science">
+  <meta name="keywords" content="portfolio, flutter developer, web developer, computer science">
+  <meta name="author" content="Rysa Laksana">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="portoku_web">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Rysa Laksana | Portfolio</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Custom CSS -->
+  <style>
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #FF9800;
+    }
+    
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 5px solid #FFF;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      display: inline-block;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-text {
+      color: white;
+      font-family: 'Roboto', sans-serif;
+      font-size: 24px;
+      margin-left: 16px;
+      animation: fadeInOut 1.5s ease-in-out infinite;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+  </style>
+
+  <!-- Flutter initialization -->
+  <script>
+    // Temporary fix for CORS issues in local development
+    if (window.location.protocol === 'file:') {
+      window._flutter = {
+        loader: {
+          loadEntrypoint: function(options) {
+            return Promise.resolve({
+              initializeEngine: function() {
+                return Promise.resolve({
+                  runApp: function() {
+                    return Promise.resolve();
+                  }
+                });
+              }
+            });
+          }
+        }
+      };
+    }
+  </script>
+  <script src="flutter.js" defer></script>
+</head>
+<body>
+  <!-- Loading indicator -->
+  <div id="loading" class="loading">
+    <span class="loader"></span>
+    <p class="loading-text">Loading...</p>
+  </div>
+
+  <script>
+    window.addEventListener('load', function() {
+      if (typeof _flutter === 'undefined') {
+        console.error('Flutter initialization failed');
+        return;
+      }
+
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: null,
+        },
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine().then(function(appRunner) {
+            appRunner.runApp();
+          }).then(function() {
+            document.getElementById('loading').style.display = 'none';
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
