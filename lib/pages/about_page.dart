@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:async';
@@ -210,6 +212,8 @@ class SkillChip extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
         side: BorderSide(
+          // ignore: duplicate_ignore
+          // ignore: deprecated_member_use
           color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
         ),
       ),

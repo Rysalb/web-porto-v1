@@ -34,100 +34,46 @@
   <title>Rysa Laksana | Portfolio</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Custom CSS -->
-  <style>
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #FF9800;
-    }
-    
-    .loader {
-      width: 48px;
-      height: 48px;
-      border: 5px solid #FFF;
-      border-bottom-color: transparent;
-      border-radius: 50%;
-      display: inline-block;
-      box-sizing: border-box;
-      animation: rotation 1s linear infinite;
-    }
-
-    @keyframes rotation {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .loading-text {
-      color: white;
-      font-family: 'Roboto', sans-serif;
-      font-size: 24px;
-      margin-left: 16px;
-      animation: fadeInOut 1.5s ease-in-out infinite;
-    }
-
-    @keyframes fadeInOut {
-      0% { opacity: 0.3; }
-      50% { opacity: 1; }
-      100% { opacity: 0.3; }
-    }
-  </style>
-
-  <!-- Flutter initialization -->
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    const serviceWorkerVersion = "1187033605";
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+</head>
+<body>
   <script>
     window.addEventListener('load', function(ev) {
-      // Add main.dart.js entrypoint
+      // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
-          serviceWorkerVersion: null,
+          serviceWorkerVersion: serviceWorkerVersion,
         },
         onEntrypointLoaded: async function(engineInitializer) {
-          let appRunner = null;
-          try {
-            appRunner = await engineInitializer.initializeEngine({
-              hostElement: document.querySelector('#flutter_app'),
-              renderer: 'html',
-              // Add these configurations
-              assetBase: "/",
-              canvasKitBaseUrl: "/canvaskit/",
-              initialRoute: "/"
-            });
-          } catch(e) {
-            console.error("Failed to initialize engine", e);
-            return;
-          }
-
-          try {
-            await appRunner.runApp();
-            
-            // Hide loading indicator after successful load
-            const loadingElement = document.querySelector('#loading');
-            if (loadingElement) {
-              loadingElement.style.display = 'none'; // Change remove() to style.display
-            }
-          } catch(e) {
-            console.error("Failed to run app", e);
-            document.querySelector('#loading').innerHTML = 
-              '<p style="color: white;">Failed to load application. Please refresh the page.</p>';
-          }
+          const appRunner = await engineInitializer.initializeEngine();
+          await appRunner.runApp();
         }
       });
     });
   </script>
-</head>
-<body style="margin: 0; padding: 0; overflow: hidden;">
-  <div id="flutter_app" style="width: 100vw; height: 100vh;"></div>
-  <!-- Loading indicator -->
-  <div id="loading" class="loading">
+  <div id="loading" style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #FF9800;">
+    <style>
+      .loader {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #FFF;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+      }
+      @keyframes rotation {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
     <span class="loader"></span>
-    <p class="loading-text">Loading...</p>
   </div>
 </body>
 </html>

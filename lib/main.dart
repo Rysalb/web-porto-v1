@@ -120,7 +120,9 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: isDark 
+            // ignore: deprecated_member_use
             ? Colors.black.withOpacity(0.8)
+            // ignore: deprecated_member_use
             : Colors.white.withOpacity(0.8),
         flexibleSpace: ClipRect(
           child: BackdropFilter(
