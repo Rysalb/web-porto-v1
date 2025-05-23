@@ -14,7 +14,7 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-  <base href="$FLUTTER_BASE_HREF">
+  <base href="/">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -110,22 +110,30 @@
   </div>
 
   <script>
+    // Define serviceWorkerVersion if not already defined
+    var serviceWorkerVersion = null;
+    
     window.addEventListener('load', function() {
-      if (typeof _flutter === 'undefined') {
-        console.error('Flutter initialization failed');
-        return;
-      }
-
+      // Detect if running on Vercel
+      const isVercel = window.location.hostname.includes('vercel.app');
+      
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
-          serviceWorkerVersion: null,
+          serviceWorkerVersion: serviceWorkerVersion,
+          serviceWorkerUrl: '/flutter_service_worker.js?v=' + serviceWorkerVersion
         },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
-          }).then(function() {
+        onEntrypointLoaded: async function(engineInitializer) {
+          try {
+            const appRunner = await engineInitializer.initializeEngine({
+              renderer: 'html'  // Use HTML renderer for better compatibility
+            });
+            await appRunner.runApp();
             document.getElementById('loading').style.display = 'none';
-          });
+          } catch (e) {
+            console.error('Flutter initialization error:', e);
+            document.getElementById('loading').innerHTML = 
+              '<p style="color: white;">Failed to load application. Please refresh the page.</p>';
+          }
         }
       });
     });
