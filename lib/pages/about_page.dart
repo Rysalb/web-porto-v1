@@ -137,6 +137,27 @@ class _AboutPageState extends State<AboutPage> {
                     const SkillChip(skill: 'SQL').animate()
                       .fadeIn(delay: 1600.ms)
                       .slideX(begin: -1, end: 0, delay: 1600.ms),
+                    const SkillChip(skill: 'Figma').animate()
+                      .fadeIn(delay: 1600.ms)
+                      .slideX(begin: -1, end: 0, delay: 1600.ms),
+                    const SkillChip(skill: 'Word').animate()
+                      .fadeIn(delay: 1600.ms)
+                      .slideX(begin: -1, end: 0, delay: 1600.ms),
+                    const SkillChip(skill: 'Excel').animate()
+                      .fadeIn(delay: 1600.ms)
+                      .slideX(begin: -1, end: 0, delay: 1600.ms),
+                    const SkillChip(skill: 'Canva').animate()
+                      .fadeIn(delay: 1600.ms)
+                      .slideX(begin: -1, end: 0, delay: 1600.ms),
+                    const SkillChip(skill: 'Photoshop').animate()
+                      .fadeIn(delay: 1600.ms)
+                      .slideX(begin: -1, end: 0, delay: 1600.ms),
+                    const SkillChip(skill: 'Capcut').animate()
+                      .fadeIn(delay: 1600.ms)
+                      .slideX(begin: -1, end: 0, delay: 1600.ms),
+                    const SkillChip(skill: 'Go').animate()
+                      .fadeIn(delay: 1600.ms)
+                      .slideX(begin: -1, end: 0, delay: 1600.ms),
                   ].map((chip) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: chip,
@@ -200,6 +221,20 @@ class SkillChip extends StatelessWidget {
         return 'https://cdn.iconscout.com/icon/free/png-256/php-2752101-2284918.png';
       case 'css':
         return 'https://cdn.iconscout.com/icon/free/png-256/css3-11-1175239.png';
+      case 'figma':
+        return 'https://img.icons8.com/color/48/figma--v1.png';
+      case 'word':
+        return 'https://img.icons8.com/color/48/microsoft-word-2019--v2.png';
+      case 'excel':  
+        return 'https://img.icons8.com/color/48/microsoft-excel-2019--v1.png';
+      case 'canva': 
+        return 'https://img.icons8.com/fluency/48/canva.png';
+      case 'photoshop':
+        return 'https://img.icons8.com/color/48/adobe-photoshop--v1.png';
+      case 'capcut':
+        return 'https://images.seeklogo.com/logo-png/43/1/capcut-logo-png_seeklogo-437025.png';
+      case 'go':  
+        return '<https://static.cdnlogo.com/logos/g/35/golang.svg';
       default:
         return '';
     }
