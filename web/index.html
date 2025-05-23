@@ -80,63 +80,54 @@
   </style>
 
   <!-- Flutter initialization -->
-  <script>
-    // Temporary fix for CORS issues in local development
-    if (window.location.protocol === 'file:') {
-      window._flutter = {
-        loader: {
-          loadEntrypoint: function(options) {
-            return Promise.resolve({
-              initializeEngine: function() {
-                return Promise.resolve({
-                  runApp: function() {
-                    return Promise.resolve();
-                  }
-                });
-              }
-            });
-          }
-        }
-      };
-    }
-  </script>
   <script src="flutter.js" defer></script>
-</head>
-<body>
-  <!-- Loading indicator -->
-  <div id="loading" class="loading">
-    <span class="loader"></span>
-    <p class="loading-text">Loading...</p>
-  </div>
-
   <script>
-    // Define serviceWorkerVersion if not already defined
-    var serviceWorkerVersion = null;
-    
-    window.addEventListener('load', function() {
-      // Detect if running on Vercel
-      const isVercel = window.location.hostname.includes('vercel.app');
-      
+    window.addEventListener('load', function(ev) {
+      // Add main.dart.js entrypoint
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-          serviceWorkerUrl: '/flutter_service_worker.js?v=' + serviceWorkerVersion
+          serviceWorkerVersion: null,
         },
         onEntrypointLoaded: async function(engineInitializer) {
+          let appRunner = null;
           try {
-            const appRunner = await engineInitializer.initializeEngine({
-              renderer: 'html'  // Use HTML renderer for better compatibility
+            appRunner = await engineInitializer.initializeEngine({
+              hostElement: document.querySelector('#flutter_app'),
+              renderer: 'html',
+              // Add these configurations
+              assetBase: "/",
+              canvasKitBaseUrl: "/canvaskit/",
+              initialRoute: "/"
             });
+          } catch(e) {
+            console.error("Failed to initialize engine", e);
+            return;
+          }
+
+          try {
             await appRunner.runApp();
-            document.getElementById('loading').style.display = 'none';
-          } catch (e) {
-            console.error('Flutter initialization error:', e);
-            document.getElementById('loading').innerHTML = 
+            
+            // Hide loading indicator after successful load
+            const loadingElement = document.querySelector('#loading');
+            if (loadingElement) {
+              loadingElement.style.display = 'none'; // Change remove() to style.display
+            }
+          } catch(e) {
+            console.error("Failed to run app", e);
+            document.querySelector('#loading').innerHTML = 
               '<p style="color: white;">Failed to load application. Please refresh the page.</p>';
           }
         }
       });
     });
   </script>
+</head>
+<body style="margin: 0; padding: 0; overflow: hidden;">
+  <div id="flutter_app" style="width: 100vw; height: 100vh;"></div>
+  <!-- Loading indicator -->
+  <div id="loading" class="loading">
+    <span class="loader"></span>
+    <p class="loading-text">Loading...</p>
+  </div>
 </body>
 </html>
