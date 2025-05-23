@@ -52,139 +52,142 @@ class _AboutPageState extends State<AboutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < 600;
+    final paddingTop = MediaQuery.of(context).padding.top + kToolbarHeight + 20;
+
+    return Container(
       height: MediaQuery.of(context).size.height,
-      child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(
-              'https://images.unsplash.com/photo-1614850523459-c2f4c699c52e',
+      padding: EdgeInsets.fromLTRB(
+        isMobile ? 16 : 32,
+        paddingTop, // Add padding for AppBar
+        isMobile ? 16 : 32,
+        isMobile ? 16 : 32
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'About Me',
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
             ),
-            fit: BoxFit.cover,
-            opacity: 0.05,
-          ),
-        ),
-        child: SingleChildScrollView(
-          controller: _mainScrollController, // Use main scroll controller here
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'About Me',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
+          ).animate().slideX(begin: 0.2),
+          const SizedBox(height: 24),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Hi my name is Rysa Laksana. I am particularly interested in mobile app development using Flutter and have a keen desire to delve into web programming using React JS. My commitment to staying updated with the latest trends in technology showcases my dedication to continuous learning.',
+                    style: TextStyle(fontSize: 16, height: 1.5),
+                  ).animate()
+                    .fadeIn(delay: 200.ms)
+                    .slideY(begin: 0.2),
+                  const SizedBox(height: 30),
+                  Text(
+                    'Skills',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ).animate()
+                    .fadeIn(delay: 400.ms),
+                  const SizedBox(height: 20),
+                  SingleChildScrollView(
+                    controller: _skillsScrollController, // Use skills scroll controller here
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        const SkillChip(skill: 'Flutter').animate()
+                          .fadeIn(delay: 500.ms)
+                          .slideX(begin: -1, end: 0, delay: 500.ms),
+                        const SkillChip(skill: 'Dart').animate()
+                          .fadeIn(delay: 600.ms)
+                          .slideX(begin: -1, end: 0, delay: 600.ms),
+                        const SkillChip(skill: 'Java').animate()
+                          .fadeIn(delay: 700.ms)
+                          .slideX(begin: -1, end: 0, delay: 700.ms),
+                        const SkillChip(skill: 'Python').animate()
+                          .fadeIn(delay: 800.ms)
+                          .slideX(begin: -1, end: 0, delay: 800.ms),
+                        const SkillChip(skill: 'HTML/CSS').animate()
+                          .fadeIn(delay: 900.ms)
+                          .slideX(begin: -1, end: 0, delay: 900.ms),
+                        const SkillChip(skill: 'JavaScript').animate()
+                          .fadeIn(delay: 1000.ms)
+                          .slideX(begin: -1, end: 0, delay: 1000.ms),
+                        const SkillChip(skill: 'Laravel').animate()
+                          .fadeIn(delay: 1100.ms)
+                          .slideX(begin: -1, end: 0, delay: 1100.ms),
+                        const SkillChip(skill: 'React').animate()
+                          .fadeIn(delay: 1200.ms)
+                          .slideX(begin: -1, end: 0, delay: 1200.ms),
+                        const SkillChip(skill: 'PHP').animate()
+                          .fadeIn(delay: 1300.ms)
+                          .slideX(begin: -1, end: 0, delay: 1300.ms),
+                        const SkillChip(skill: 'CSS').animate()
+                          .fadeIn(delay: 1400.ms)
+                          .slideX(begin: -1, end: 0, delay: 1400.ms),
+                        const SkillChip(skill: 'Git').animate()
+                          .fadeIn(delay: 1500.ms)
+                          .slideX(begin: -1, end: 0, delay: 1500.ms),
+                        const SkillChip(skill: 'SQL').animate()
+                          .fadeIn(delay: 1600.ms)
+                          .slideX(begin: -1, end: 0, delay: 1600.ms),
+                        const SkillChip(skill: 'Figma').animate()
+                          .fadeIn(delay: 1600.ms)
+                          .slideX(begin: -1, end: 0, delay: 1600.ms),
+                        const SkillChip(skill: 'Word').animate()
+                          .fadeIn(delay: 1600.ms)
+                          .slideX(begin: -1, end: 0, delay: 1600.ms),
+                        const SkillChip(skill: 'Excel').animate()
+                          .fadeIn(delay: 1600.ms)
+                          .slideX(begin: -1, end: 0, delay: 1600.ms),
+                        const SkillChip(skill: 'Canva').animate()
+                          .fadeIn(delay: 1600.ms)
+                          .slideX(begin: -1, end: 0, delay: 1600.ms),
+                        const SkillChip(skill: 'Photoshop').animate()
+                          .fadeIn(delay: 1600.ms)
+                          .slideX(begin: -1, end: 0, delay: 1600.ms),
+                        const SkillChip(skill: 'Capcut').animate()
+                          .fadeIn(delay: 1600.ms)
+                          .slideX(begin: -1, end: 0, delay: 1600.ms),
+                        const SkillChip(skill: 'Go').animate()
+                          .fadeIn(delay: 1600.ms)
+                          .slideX(begin: -1, end: 0, delay: 1600.ms),
+                      ].map((chip) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: chip,
+                      )).toList(),
                     ),
-              ).animate()
-                .fadeIn(duration: 600.ms)
-                .slideX(begin: -0.2),
-              const SizedBox(height: 20),
-              const Text(
-                'Hi my name is Rysa Laksana. I am particularly interested in mobile app development using Flutter and have a keen desire to delve into web programming using React JS. My commitment to staying updated with the latest trends in technology showcases my dedication to continuous learning.',
-                style: TextStyle(fontSize: 16, height: 1.5),
-              ).animate()
-                .fadeIn(delay: 200.ms)
-                .slideY(begin: 0.2),
-              const SizedBox(height: 30),
-              Text(
-                'Skills',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ).animate()
-                .fadeIn(delay: 400.ms),
-              const SizedBox(height: 20),
-              SingleChildScrollView(
-                controller: _skillsScrollController, // Use skills scroll controller here
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    const SkillChip(skill: 'Flutter').animate()
-                      .fadeIn(delay: 500.ms)
-                      .slideX(begin: -1, end: 0, delay: 500.ms),
-                    const SkillChip(skill: 'Dart').animate()
-                      .fadeIn(delay: 600.ms)
-                      .slideX(begin: -1, end: 0, delay: 600.ms),
-                    const SkillChip(skill: 'Java').animate()
-                      .fadeIn(delay: 700.ms)
-                      .slideX(begin: -1, end: 0, delay: 700.ms),
-                    const SkillChip(skill: 'Python').animate()
-                      .fadeIn(delay: 800.ms)
-                      .slideX(begin: -1, end: 0, delay: 800.ms),
-                    const SkillChip(skill: 'HTML/CSS').animate()
-                      .fadeIn(delay: 900.ms)
-                      .slideX(begin: -1, end: 0, delay: 900.ms),
-                    const SkillChip(skill: 'JavaScript').animate()
-                      .fadeIn(delay: 1000.ms)
-                      .slideX(begin: -1, end: 0, delay: 1000.ms),
-                    const SkillChip(skill: 'Laravel').animate()
-                      .fadeIn(delay: 1100.ms)
-                      .slideX(begin: -1, end: 0, delay: 1100.ms),
-                    const SkillChip(skill: 'React').animate()
-                      .fadeIn(delay: 1200.ms)
-                      .slideX(begin: -1, end: 0, delay: 1200.ms),
-                    const SkillChip(skill: 'PHP').animate()
-                      .fadeIn(delay: 1300.ms)
-                      .slideX(begin: -1, end: 0, delay: 1300.ms),
-                    const SkillChip(skill: 'CSS').animate()
-                      .fadeIn(delay: 1400.ms)
-                      .slideX(begin: -1, end: 0, delay: 1400.ms),
-                    const SkillChip(skill: 'Git').animate()
-                      .fadeIn(delay: 1500.ms)
-                      .slideX(begin: -1, end: 0, delay: 1500.ms),
-                    const SkillChip(skill: 'SQL').animate()
-                      .fadeIn(delay: 1600.ms)
-                      .slideX(begin: -1, end: 0, delay: 1600.ms),
-                    const SkillChip(skill: 'Figma').animate()
-                      .fadeIn(delay: 1600.ms)
-                      .slideX(begin: -1, end: 0, delay: 1600.ms),
-                    const SkillChip(skill: 'Word').animate()
-                      .fadeIn(delay: 1600.ms)
-                      .slideX(begin: -1, end: 0, delay: 1600.ms),
-                    const SkillChip(skill: 'Excel').animate()
-                      .fadeIn(delay: 1600.ms)
-                      .slideX(begin: -1, end: 0, delay: 1600.ms),
-                    const SkillChip(skill: 'Canva').animate()
-                      .fadeIn(delay: 1600.ms)
-                      .slideX(begin: -1, end: 0, delay: 1600.ms),
-                    const SkillChip(skill: 'Photoshop').animate()
-                      .fadeIn(delay: 1600.ms)
-                      .slideX(begin: -1, end: 0, delay: 1600.ms),
-                    const SkillChip(skill: 'Capcut').animate()
-                      .fadeIn(delay: 1600.ms)
-                      .slideX(begin: -1, end: 0, delay: 1600.ms),
-                    const SkillChip(skill: 'Go').animate()
-                      .fadeIn(delay: 1600.ms)
-                      .slideX(begin: -1, end: 0, delay: 1600.ms),
-                  ].map((chip) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: chip,
-                  )).toList(),
-                ),
+                  ),
+                  const SizedBox(height: 30),
+                  Text(
+                    'Education',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ).animate()
+                    .fadeIn(delay: 1300.ms),
+                  const SizedBox(height: 20),
+                  const EducationCard(
+                    university: 'University of Muhammadiyah Malang',
+                    degree: 'Bachelor of Computer Science',
+                    year: '2020-2025',
+                    gpa: '3.88',
+                  ).animate()
+                    .fadeIn(delay: 1400.ms)
+                    .slideX(begin: 0.2),
+                ],
               ),
-              const SizedBox(height: 30),
-              Text(
-                'Education',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ).animate()
-                .fadeIn(delay: 1300.ms),
-              const SizedBox(height: 20),
-              const EducationCard(
-                university: 'University of Muhammadiyah Malang',
-                degree: 'Bachelor of Computer Science',
-                year: '2020-2025',
-                gpa: '3.88',
-              ).animate()
-                .fadeIn(delay: 1400.ms)
-                .slideX(begin: 0.2),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

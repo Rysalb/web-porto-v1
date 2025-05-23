@@ -57,56 +57,21 @@ class PortfolioHomePage extends StatefulWidget {
 }
 
 class _PortfolioHomePageState extends State<PortfolioHomePage> {
-  final ScrollController _scrollController = ScrollController();
+  final PageController _pageController = PageController();
   int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    const HomePage(),
-    const AboutPage(),
-    const ProjectsPage(),
-    const ContactPage(),
-  ];
-
-  void _scrollToIndex(int index) {
-    final double itemHeight = MediaQuery.of(context).size.height;
-    final double appBarHeight = AppBar().preferredSize.height;
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
-    
-    _scrollController.animateTo(
-      (index * itemHeight) - (appBarHeight + statusBarHeight),
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
-  void _onScroll() {
-    final double appBarHeight = AppBar().preferredSize.height;
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
-    final double offset = _scrollController.offset + (appBarHeight + statusBarHeight);
-    final double itemHeight = MediaQuery.of(context).size.height;
-    
-    final int index = (offset / itemHeight).round();
-    if (index != _selectedIndex) {
-      setState(() {
-        _selectedIndex = index.clamp(0, _pages.length - 1);
-      });
-    }
+  void _scrollToIndex(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -209,10 +174,17 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
                 ],
               ),
       ),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: _pages,
+      body: SafeArea(
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: (index) => setState(() => _selectedIndex = index),
+          scrollDirection: Axis.vertical,
+          children: const [
+            HomePage(),
+            AboutPage(),
+            ProjectsPage(),
+            ContactPage(),
+          ],
         ),
       ),
     );

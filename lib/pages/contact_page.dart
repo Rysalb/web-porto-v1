@@ -25,31 +25,37 @@ class _ContactPageState extends State<ContactPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < 600;
 
     return Container(
       height: MediaQuery.of(context).size.height,
-      padding: EdgeInsets.all(isMobile ? 16 : 24),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Contact Me',
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: isMobile ? 24 : 32,
-                  ),
+      padding: EdgeInsets.all(isMobile ? 16 : 32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Contact Me',
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
             ),
-            SizedBox(height: isMobile ? 20 : 30),
-            // Responsive layout for form and contact info
-            isMobile
-                ? _buildMobileLayout()
-                : _buildDesktopLayout(),
-          ],
-        ),
+          ),
+          const SizedBox(height: 24),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: Column(
+                children: [
+                  // Responsive layout for form and contact info
+                  isMobile
+                      ? _buildMobileLayout()
+                      : _buildDesktopLayout(),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
