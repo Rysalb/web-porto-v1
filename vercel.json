@@ -2,21 +2,24 @@
   "version": 2,
   "routes": [
     { "handle": "filesystem" },
-    { 
+    {
       "src": "/flutter_service_worker.js",
       "headers": {
-        "cache-control": "public, max-age=0, must-revalidate",
+        "cache-control": "no-cache",
         "Access-Control-Allow-Origin": "*"
       }
     },
     {
-      "src": "/manifest.json",
+      "src": "/(.*).js",
       "headers": {
-        "Access-Control-Allow-Origin": "*"
+        "cache-control": "public, max-age=0, must-revalidate"
       }
     },
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
   ],
-  "buildCommand": "flutter build web --release",
+  "buildCommand": "flutter build web --release --web-renderer html",
   "outputDirectory": "build/web"
 }
