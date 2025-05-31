@@ -62,6 +62,14 @@ class ProjectsPage extends StatelessWidget {
                   projectUrl: 'https://github.com/Rysalb/fe_kos_hansarin',
                   isAssetImage: true,
                 ),
+                  ProjectCard(
+                  title: 'Yusic',
+                  description: 'Yusic adalah aplikasi pemutar musik berbasis Flutter yang memungkinkan pengguna untuk melakukan streaming lagu langsung dari YouTube, mengelola playlist, dan memutar musik secara offline',
+                  technologies: ['Flutter', 'youtube_explode_dart', 'just_audio'],
+                  imageUrl: 'assets/images/proyek4.png',
+                  projectUrl: 'https://drive.google.com/file/d/1y_uLyUzqIWHZwFcY4Fk6I1Y4GM_48_zl/view?usp=sharing',
+                  isAssetImage: true,
+                ),
               ].mapIndexed((index, card) => card.animate(
                 delay: (200 * index).ms)
                 .fadeIn()
