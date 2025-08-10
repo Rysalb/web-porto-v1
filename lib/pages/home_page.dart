@@ -49,10 +49,6 @@ class HomePage extends StatelessWidget {
               child: AnimatedTextKit(
                 animatedTexts: [
                   TypewriterAnimatedText(
-                    'Fresh Graduate Computer Science',
-                    speed: const Duration(milliseconds: 100),
-                  ),
-                  TypewriterAnimatedText(
                     'Flutter Developer',
                     speed: const Duration(milliseconds: 100),
                   ),

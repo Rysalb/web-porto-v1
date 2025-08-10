@@ -36,39 +36,68 @@ class ProjectsPage extends StatelessWidget {
               crossAxisCount: crossAxisCount,
               crossAxisSpacing: width < 600 ? 16 : 20,
               mainAxisSpacing: width < 600 ? 16 : 20,
-              childAspectRatio: width < 600 ? 0.8 : 1.0, // Adjusted ratio
+              childAspectRatio: width < 600 ? 0.8 : 1.0,
               children: [
                 ProjectCard(
                   title: 'Sistem Pengajuan PKN (Praktek Kerja Nyata)',
                   description: 'Sistem pengajuan PKN (Praktek Kerja Nyata) menggunakan koneksi Database mySql sebagai tempat penyimpanan data user ataupun inputan user',
+                  detailedDescription: 'Aplikasi desktop berbasis Java yang dirancang untuk mempermudah mahasiswa dalam mengajukan PKN. Sistem ini menggunakan database MySQL untuk menyimpan data mahasiswa, dosen pembimbing, dan status pengajuan. Fitur utama meliputi registrasi mahasiswa, pengajuan PKN, verifikasi dosen, dan laporan progress.',
                   technologies: ['Java', 'Mysql'],
                   imageUrl: 'assets/images/proyek1.png',
                   projectUrl: 'https://github.com/Rysalb/TubesPbo',
                   isAssetImage: true,
+                  linkType: 'Source Code',
                 ),
                 ProjectCard(
                   title: 'Ladangku.id',
                   description: 'Ladangku.id is a web-based application that provides a platform for farmers to sell their products online.',
+                  detailedDescription: 'Platform e-commerce untuk petani yang memungkinkan mereka menjual hasil pertanian secara online. Website ini dibuat dengan HTML dan CSS yang responsif, menyediakan interface yang user-friendly untuk petani dan pembeli. Fitur meliputi katalog produk, sistem pencarian, dan informasi detail produk pertanian.',
                   technologies: ['HTML', 'CSS'],
                   imageUrl: 'assets/images/proyek2.png',
                   projectUrl: 'https://github.com/Rysalb/Ladangku-UI',
                   isAssetImage: true,
+                  linkType: 'Source Code',
                 ),
                 ProjectCard(
                   title: 'Aplikasi Sistem Manajemen Kos',
                   description: 'Aplikasi manajemen kos adalah solusi digital untuk mengelola operasional kos secara efisien. Aplikasi ini terdiri dari dua platform: backend menggunakan Laravel dan frontend menggunakan Flutter.',
+                  detailedDescription: 'Sistem manajemen kos yang terdiri dari aplikasi mobile Flutter dan backend Laravel API. Aplikasi ini memungkinkan pengelola kos untuk mengelola penyewa, pembayaran bulanan, komplain, dan fasilitas kos. Sistem pembayaran terintegrasi dan notifikasi real-time untuk penyewa dan pengelola.',
                   technologies: ['Flutter', 'Laravel', 'MySQL'],
                   imageUrl: 'assets/images/proyek3.png',
                   projectUrl: 'https://github.com/Rysalb/fe_kos_hansarin',
                   isAssetImage: true,
+                  linkType: 'Source Code',
                 ),
-                  ProjectCard(
+                ProjectCard(
                   title: 'Yusic',
                   description: 'Yusic adalah aplikasi pemutar musik berbasis Flutter yang memungkinkan pengguna untuk melakukan streaming lagu langsung dari YouTube, mengelola playlist, dan memutar musik secara offline',
+                  detailedDescription: 'Aplikasi pemutar musik mobile sederhana dengan fitur streaming dari YouTube, download untuk offline playback, dan manajemen playlist yang intuitif. Menggunakan youtube_explode_dart untuk ekstraksi audio dan just_audio untuk playback.',
                   technologies: ['Flutter', 'youtube_explode_dart', 'just_audio'],
                   imageUrl: 'assets/images/proyek4.png',
                   projectUrl: 'https://drive.google.com/file/d/1y_uLyUzqIWHZwFcY4Fk6I1Y4GM_48_zl/view?usp=sharing',
                   isAssetImage: true,
+                  linkType: 'Download App',
+                ),
+           
+                ProjectCard(
+                  title: 'Money Manager',
+                  description: 'Money Manager adalah aplikasi berbasis Flutter yang dirancang untuk membantu pengguna mengelola keuangan pribadi mereka dengan lebih baik.',
+                  detailedDescription: 'Aplikasi ini memungkinkan pengguna untuk mencatat pengeluaran, mengatur anggaran, dan menganalisis kebiasaan belanja mereka. Dengan antarmuka yang intuitif dan fitur yang mudah digunakan.',
+                  technologies: ['Flutter', 'Provider', 'Supabase'],
+                  imageUrl: 'assets/images/proyek5.png',
+                  projectUrl: 'https://drive.google.com/file/d/1y_uLyUzqIWHZwFcY4Fk6I1Y4GM_48_zl/view?usp=sharing',
+                  isAssetImage: true,
+                  linkType: 'Download App',
+                ),
+                  ProjectCard(
+                  title: 'Pos App',
+                  description: 'Pos App adalah aplikasi berbasis Flutter yang dirancang untuk membantu pengguna mengelola penjualan dan inventaris mereka dengan lebih baik.',
+                  detailedDescription: 'Aplikasi ini memungkinkan pengguna untuk mencatat transaksi penjualan, mengelola produk, dan menganalisis kinerja penjualan mereka. Dengan antarmuka yang intuitif dan fitur yang mudah digunakan, Pos App membantu pengguna untuk memanage bisnis mereka dengan lebih efisien.',
+                  technologies: ['Flutter', 'blue_thermal_printer', 'Supabase'],
+                  imageUrl: 'assets/images/proyek6.png',
+                  projectUrl: '',
+                  isAssetImage: true,
+                  linkType: 'Source Code',
                 ),
               ].mapIndexed((index, card) => card.animate(
                 delay: (200 * index).ms)
@@ -87,26 +116,243 @@ class ProjectsPage extends StatelessWidget {
 class ProjectCard extends StatelessWidget {
   final String title;
   final String description;
+  final String detailedDescription;
   final List<String> technologies;
   final String imageUrl;
   final String projectUrl;
   final bool isAssetImage;
+  final String linkType;
 
   const ProjectCard({
     super.key,
     required this.title,
     required this.description,
+    required this.detailedDescription,
     required this.technologies,
     required this.imageUrl,
     required this.projectUrl,
     this.isAssetImage = false,
+    required this.linkType,
   });
 
   Future<void> _launchUrl() async {
+    // Cek jika projectUrl kosong
+    if (projectUrl.isEmpty) {
+      return; // Tidak melakukan apa-apa jika URL kosong
+    }
+    
     final Uri url = Uri.parse(projectUrl);
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  void _showProjectDetails(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < 600;
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: isMobile ? width * 0.9 : 600,
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Header with image
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: isAssetImage 
+                              ? AssetImage(imageUrl) as ImageProvider
+                              : NetworkImage(imageUrl),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                
+                // Content
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: isMobile ? 18 : 22,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        
+                        // Detailed Description
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Text(
+                              detailedDescription,
+                              style: TextStyle(
+                                fontSize: isMobile ? 14 : 16,
+                                height: 1.6,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 16),
+                        
+                        // Technologies
+                        Text(
+                          'Technologies Used:',
+                          style: TextStyle(
+                            fontSize: isMobile ? 14 : 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: technologies.map((tech) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Text(
+                              tech,
+                              style: TextStyle(
+                                fontSize: isMobile ? 12 : 14,
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          )).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                
+                // Actions
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text('Close'),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: projectUrl.isEmpty 
+                              ? () => _showPrivateDialog(context)
+                              : _launchUrl,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: projectUrl.isEmpty
+                                ? Colors.grey
+                                : Theme.of(context).colorScheme.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                    child: Text(
+                          projectUrl.isEmpty ? 'Private' : linkType
+                        ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showPrivateDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.lock,
+                color: Colors.orange,
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Private Project',
+                style: TextStyle(
+                  color: Colors.orange,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: Text(
+            'This project is currently private and not available for public access. Please contact me if you would like to know more about this project.',
+            style: TextStyle(
+              fontSize: 14,
+              height: 1.5,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                'OK',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -121,7 +367,7 @@ class ProjectCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: InkWell(
-        onTap: _launchUrl,
+        onTap: () => _showProjectDetails(context),
         borderRadius: BorderRadius.circular(12),
         child: Column(
           children: [
@@ -136,6 +382,19 @@ class ProjectCard extends StatelessWidget {
                         ? AssetImage(imageUrl) as ImageProvider
                         : NetworkImage(imageUrl),
                     fit: BoxFit.cover,
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.1),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -170,7 +429,7 @@ class ProjectCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     // Technologies
                     SizedBox(
                       height: 24,
@@ -199,6 +458,26 @@ class ProjectCard extends StatelessWidget {
                           ),
                         )).toList(),
                       ),
+                    ),
+                    const SizedBox(height: 8),
+                    // Action hint
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.touch_app,
+                          size: 14,
+                          color: Colors.grey[500],
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Tap for details',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey[500],
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

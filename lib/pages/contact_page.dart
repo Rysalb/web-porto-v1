@@ -1,27 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
-class ContactPage extends StatefulWidget {
+class ContactPage extends StatelessWidget {
   const ContactPage({super.key});
-
-  @override
-  State<ContactPage> createState() => _ContactPageState();
-}
-
-class _ContactPageState extends State<ContactPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _messageController = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _messageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +28,7 @@ class _ContactPageState extends State<ContactPage> {
               physics: const ClampingScrollPhysics(),
               child: Column(
                 children: [
-                  // Responsive layout for form and contact info
-                  isMobile
-                      ? _buildMobileLayout()
-                      : _buildDesktopLayout(),
+                  _buildContactInfo(isMobile),
                 ],
               ),
             ),
@@ -60,109 +38,7 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
-  Widget _buildMobileLayout() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildContactForm(),
-        const SizedBox(height: 32),
-        _buildContactInfo(),
-      ],
-    );
-  }
-
-  Widget _buildDesktopLayout() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(child: _buildContactForm()),
-        const SizedBox(width: 40),
-        Expanded(child: _buildContactInfo()),
-      ],
-    );
-  }
-
-  Widget _buildContactForm() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextFormField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              labelText: 'Name',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              prefixIcon: const Icon(Icons.person),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your name';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _emailController,
-            decoration: InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              prefixIcon: const Icon(Icons.email),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                return 'Please enter a valid email';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _messageController,
-            decoration: InputDecoration(
-              labelText: 'Message',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              prefixIcon: const Icon(Icons.message),
-              alignLabelWithHint: true,
-            ),
-            maxLines: 5,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your message';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: _submitForm,
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text('Send Message'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildContactInfo() {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-
+  Widget _buildContactInfo(bool isMobile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -173,23 +49,42 @@ class _ContactPageState extends State<ContactPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 20),
-        const ContactInfo(
+        const SizedBox(height: 8),
+        Text(
+          'Feel free to reach out to me through any of the following channels:',
+          style: TextStyle(
+            fontSize: isMobile ? 14 : 16,
+            color: Colors.grey[600],
+          ),
+        ),
+        const SizedBox(height: 32),
+        
+        // Contact Information Cards
+        _buildContactCard(
           icon: Icons.email,
           title: 'Email',
           content: 'rysalaksanabhakti@gmail.com',
+          onTap: () => _launchEmail('rysalaksanabhakti@gmail.com'),
         ),
-        const ContactInfo(
+        const SizedBox(height: 16),
+        
+        _buildContactCard(
           icon: Icons.phone,
           title: 'Phone',
           content: '+62 831 1177 8069',
+          onTap: () => _launchPhone('+6283111778069'),
         ),
-        const ContactInfo(
+        const SizedBox(height: 16),
+        
+        _buildContactCard(
           icon: Icons.location_on,
           title: 'Location',
           content: 'Malang, Indonesia',
+          onTap: null,
         ),
-        const SizedBox(height: 30),
+        
+        const SizedBox(height: 40),
+        
         Text(
           'Follow Me',
           style: TextStyle(
@@ -198,20 +93,20 @@ class _ContactPageState extends State<ContactPage> {
           ),
         ),
         const SizedBox(height: 20),
-        Row(
+        
+        Wrap(
+          spacing: 16,
           children: [
             SocialButton(
               iconUrl: 'https://img.icons8.com/ios-glyphs/30/github.png',
               url: 'https://github.com/Rysalb',
               tooltip: 'GitHub',
             ),
-            const SizedBox(width: 16),
             SocialButton(
               iconUrl: 'https://img.icons8.com/ios-glyphs/30/linkedin.png',
               url: 'https://www.linkedin.com/in/rysa-laksana/',
               tooltip: 'LinkedIn',
             ),
-            const SizedBox(width: 16),
             SocialButton(
               iconUrl: 'https://img.icons8.com/ios-glyphs/30/instagram-new.png',
               url: 'https://www.instagram.com/rysalaksana/',
@@ -223,99 +118,89 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
-  void _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      final name = _nameController.text;
-      final email = _emailController.text;
-      final message = _messageController.text;
-
-      // Create a well-formatted email body
-      final emailBody = '''
-From: $name
-Email: $email
-
-Message:
-$message
-''';
-
-      try {
-        // Use JS interop to open email in new tab with pre-filled content
-        final Uri emailUri = Uri(
-          scheme: 'mailto',
-          path: 'rysalaksanabhakti@gmail.com',
-          query: {
-            'subject': 'Portfolio Contact from $name',
-            'body': emailBody,
-          }.entries.fold('', (prev, e) => 
-            '$prev&${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}'
-          ).substring(1),
-        );
-
-        // Use window.open for web
-        if (await launchUrl(
-          emailUri,
-          mode: LaunchMode.externalApplication,
-          webOnlyWindowName: '_self',
-        )) {
-          _formKey.currentState!.reset();
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Opening email client...'),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
-        } else {
-          throw Exception('Could not launch email client');
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Could not open email client'),
-              backgroundColor: Colors.red,
+  Widget _buildContactCard({
+    required IconData icon,
+    required String title,
+    required String content,
+    VoidCallback? onTap,
+  }) {
+    return Builder(
+      builder: (context) => Card(
+        elevation: 2,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        content,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (onTap != null)
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Colors.grey[400],
+                  ),
+              ],
             ),
-          );
-        }
-      }
-    }
-  }
-}
-
-class ContactInfo extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String content;
-
-  const ContactInfo({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.content,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Row(
-        children: [
-          Icon(icon, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(content),
-            ],
           ),
-        ],
+        ),
       ),
     );
+  }
+
+  Future<void> _launchEmail(String email) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+    );
+    if (!await launchUrl(emailUri)) {
+      throw Exception('Could not launch email');
+    }
+  }
+
+  Future<void> _launchPhone(String phone) async {
+    final Uri phoneUri = Uri(
+      scheme: 'tel',
+      path: phone,
+    );
+    if (!await launchUrl(phoneUri)) {
+      throw Exception('Could not launch phone');
+    }
   }
 }
 
