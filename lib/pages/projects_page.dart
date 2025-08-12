@@ -149,6 +149,7 @@ class ProjectCard extends StatelessWidget {
 
   void _showProjectDetails(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     final isMobile = width < 600;
     
     showDialog(
@@ -158,19 +159,18 @@ class ProjectCard extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          insetPadding: EdgeInsets.all(isMobile ? 16 : 40),
           child: Container(
-            constraints: BoxConstraints(
-              maxWidth: isMobile ? width * 0.9 : 600,
-              maxHeight: MediaQuery.of(context).size.height * 0.8,
-            ),
+            width: isMobile ? width - 32 : 600,
+            height: isMobile ? height * 0.85 : height * 0.8,
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
                 // Header with image
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
+                  child: SizedBox(
+                    height: isMobile ? 120 : 180,
+                    width: double.infinity,
                     child: Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
@@ -187,7 +187,7 @@ class ProjectCard extends StatelessWidget {
                 // Content
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(isMobile ? 16 : 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -195,62 +195,63 @@ class ProjectCard extends StatelessWidget {
                         Text(
                           title,
                           style: TextStyle(
-                            fontSize: isMobile ? 18 : 22,
+                            fontSize: isMobile ? 16 : 22,
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: isMobile ? 12 : 16),
                         
-                        // Detailed Description
+                        // Detailed Description - Improved for mobile
+                       
+                        const SizedBox(height: 8),
                         Expanded(
+                          flex: isMobile ? 3 : 2,
                           child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
                             child: Text(
                               detailedDescription,
                               style: TextStyle(
-                                fontSize: isMobile ? 14 : 16,
-                                height: 1.6,
+                                fontSize: isMobile ? 12 : 16,
+                                height: 1.5,
                                 color: Colors.grey[700],
                               ),
                             ),
                           ),
                         ),
                         
-                        const SizedBox(height: 16),
+                        SizedBox(height: isMobile ? 12 : 16),
                         
                         // Technologies
-                        Text(
-                          'Technologies Used:',
-                          style: TextStyle(
-                            fontSize: isMobile ? 14 : 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                    
                         const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: technologies.map((tech) => Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                        Container(
+                          width: double.infinity,
+                          child: Wrap(
+                            spacing: 6,
+                            runSpacing: 6,
+                            children: technologies.map((tech) => Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isMobile ? 8 : 12,
+                                vertical: isMobile ? 4 : 6,
                               ),
-                            ),
-                            child: Text(
-                              tech,
-                              style: TextStyle(
-                                fontSize: isMobile ? 12 : 14,
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.w600,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                                ),
                               ),
-                            ),
-                          )).toList(),
+                              child: Text(
+                                tech,
+                                style: TextStyle(
+                                  fontSize: isMobile ? 10 : 14,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            )).toList(),
+                          ),
                         ),
                       ],
                     ),
@@ -258,45 +259,119 @@ class ProjectCard extends StatelessWidget {
                 ),
                 
                 // Actions
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => Navigator.pop(context),
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text('Close'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: projectUrl.isEmpty 
-                              ? () => _showPrivateDialog(context)
-                              : _launchUrl,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: projectUrl.isEmpty
-                                ? Colors.grey
-                                : Theme.of(context).colorScheme.primary,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                    child: Text(
-                          projectUrl.isEmpty ? 'Private' : linkType
-                        ),
-                        ),
-                      ),
-                    ],
+                Container(
+                  padding: EdgeInsets.all(isMobile ? 16 : 20),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(color: Colors.grey.shade300),
+                    ),
                   ),
+                  child: isMobile 
+                    ? Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: projectUrl.isEmpty 
+                                  ? () => _showPrivateDialog(context)
+                                  : _launchUrl,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: projectUrl.isEmpty
+                                    ? Colors.grey
+                                    : Theme.of(context).colorScheme.primary,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    projectUrl.isEmpty 
+                                      ? Icons.lock
+                                      : linkType == 'Source Code' 
+                                        ? Icons.code 
+                                        : Icons.download,
+                                    size: 18,
+                                    color: const Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    projectUrl.isEmpty ? 'Private Project' : linkType,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton(
+                              onPressed: () => Navigator.pop(context),
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text('Close'),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () => Navigator.pop(context),
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text('Close'),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: projectUrl.isEmpty 
+                                  ? () => _showPrivateDialog(context)
+                                  : _launchUrl,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: projectUrl.isEmpty
+                                    ? Colors.grey
+                                    : Theme.of(context).colorScheme.primary,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    projectUrl.isEmpty 
+                                      ? Icons.lock
+                                      : linkType == 'Source Code' 
+                                        ? Icons.code 
+                                        : Icons.download,
+                                    size: 18,
+                                    color: const Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(projectUrl.isEmpty ? 'Private' : linkType),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                 ),
               ],
             ),
