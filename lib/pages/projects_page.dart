@@ -147,6 +147,127 @@ class ProjectCard extends StatelessWidget {
     }
   }
 
+  // New method for showing zoomed image
+  void _showZoomedImage(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final isMobile = width < 600;
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.black87,
+          insetPadding: EdgeInsets.all(isMobile ? 20 : 40),
+          child: Stack(
+            children: [
+              // Background tap to close
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.transparent,
+                ),
+              ),
+              // Zoomed image with interactive viewer
+              Center(
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: isMobile ? width * 0.9 : width * 0.8,
+                    maxHeight: isMobile ? height * 0.8 : height * 0.9,
+                  ),
+                  child: InteractiveViewer(
+                    panEnabled: true,
+                    boundaryMargin: const EdgeInsets.all(20),
+                    minScale: 0.5,
+                    maxScale: 4.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.5),
+                              blurRadius: 20,
+                              spreadRadius: 5,
+                            ),
+                          ],
+                        ),
+                        child: Image(
+                          image: isAssetImage 
+                              ? AssetImage(imageUrl) as ImageProvider
+                              : NetworkImage(imageUrl),
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              width: 300,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.error, size: 50, color: Colors.grey),
+                                  SizedBox(height: 8),
+                                  Text('Image not available'),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // Close button
+              Positioned(
+                top: isMobile ? 30 : 50,
+                right: isMobile ? 30 : 50,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close, color: Colors.black),
+                    tooltip: 'Close',
+                  ),
+                ),
+              ),
+              // Zoom instructions (only show on mobile)
+              if (isMobile)
+                Positioned(
+                  bottom: 30,
+                  left: 20,
+                  right: 20,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Text(
+                      'Pinch to zoom • Drag to pan • Tap to close',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _showProjectDetails(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -165,20 +286,58 @@ class ProjectCard extends StatelessWidget {
             height: isMobile ? height * 0.85 : height * 0.8,
             child: Column(
               children: [
-                // Header with image
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  child: SizedBox(
-                    height: isMobile ? 120 : 180,
-                    width: double.infinity,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: isAssetImage 
-                              ? AssetImage(imageUrl) as ImageProvider
-                              : NetworkImage(imageUrl),
-                          fit: BoxFit.cover,
-                        ),
+                // Header with clickable image for zoom
+                GestureDetector(
+                  onTap: () => _showZoomedImage(context),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    child: SizedBox(
+                      height: isMobile ? 120 : 180,
+                      width: double.infinity,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: isAssetImage 
+                                    ? AssetImage(imageUrl) as ImageProvider
+                                    : NetworkImage(imageUrl),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          // Zoom indicator overlay
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.zoom_in,
+                                    color: Colors.white,
+                                    size: 16,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Zoom',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -203,7 +362,6 @@ class ProjectCard extends StatelessWidget {
                         SizedBox(height: isMobile ? 12 : 16),
                         
                         // Detailed Description - Improved for mobile
-                       
                         const SizedBox(height: 8),
                         Expanded(
                           flex: isMobile ? 3 : 2,
@@ -223,7 +381,6 @@ class ProjectCard extends StatelessWidget {
                         SizedBox(height: isMobile ? 12 : 16),
                         
                         // Technologies
-                    
                         const SizedBox(height: 8),
                         Container(
                           width: double.infinity,
@@ -446,28 +603,52 @@ class ProjectCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Column(
           children: [
-            // Image section with fixed height
+            // Image section with fixed height and zoom capability
             AspectRatio(
               aspectRatio: 16 / 9,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                  image: DecorationImage(
-                    image: isAssetImage 
-                        ? AssetImage(imageUrl) as ImageProvider
-                        : NetworkImage(imageUrl),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+              child: GestureDetector(
+                onTap: () => _showZoomedImage(context),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.1),
+                    image: DecorationImage(
+                      image: isAssetImage 
+                          ? AssetImage(imageUrl) as ImageProvider
+                          : NetworkImage(imageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.1),
+                        ],
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        // Zoom icon indicator
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              Icons.zoom_in,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
