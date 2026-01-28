@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:portoku_web/pages/about_page.dart';
 import 'package:portoku_web/pages/contact_page.dart';
 import 'package:portoku_web/pages/home_page.dart';
@@ -22,25 +23,42 @@ class MyApp extends StatelessWidget {
       builder: (_, ThemeMode currentMode, __) {
         return MaterialApp(
           title: 'Rysa Laksana Portfolio',
+          debugShowCheckedModeBanner: false,
           themeMode: currentMode,
           theme: ThemeData(
+            useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.orange,
-              primary: Colors.orange,
-              secondary: Colors.deepOrange,
+              primary: const Color(0xFFFF9800),
+              secondary: const Color(0xFFFF5722),
+              surface: const Color(0xFFFAFAFA),
+              onSurface: Colors.black87,
             ),
-            useMaterial3: true,
+            textTheme: GoogleFonts.poppinsTextTheme(),
+            scaffoldBackgroundColor: const Color(0xFFFAFAFA),
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
           ),
           darkTheme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.dark,
             colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.orange,
-              primary: Colors.orange,
-              secondary: Colors.deepOrange,
               brightness: Brightness.dark,
+              primary: const Color(0xFFFFB74D), // Lighter orange for dark mode
+              secondary: const Color(0xFFFF8A65),
+              surface: const Color(0xFF1E1E1E),
+              onSurface: Colors.white70,
             ),
+            textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
             scaffoldBackgroundColor: const Color(0xFF121212),
             cardColor: const Color(0xFF1E1E1E),
-            useMaterial3: true,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
           ),
           home: const PortfolioHomePage(),
         );

@@ -82,7 +82,7 @@ class _AboutPageState extends State<AboutPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Hi my name is Rysa Laksana. I am particularly interested in mobile app development using Flutter and have a keen desire to delve into web programming using React JS. My commitment to staying updated with the latest trends in technology showcases my dedication to continuous learning.',
+                    'Hi my name is Rysa Laksana. You can call me Aksan. I have a strong interest in fishing, which allows me to enjoy nature while developing patience, focus, and strategic thinking. This hobby helps me maintain balance, sharpen my perseverance, and refresh my mindset, positively influencing my productivity and creativity in daily activities.',
                     style: TextStyle(fontSize: 16, height: 1.5),
                   ).animate()
                     .fadeIn(delay: 200.ms)

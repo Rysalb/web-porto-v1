@@ -10,128 +10,180 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final size = MediaQuery.of(context).size;
+
     return Container(
-      height: MediaQuery.of(context).size.height,
+      height: size.height,
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         image: DecorationImage(
-          image: NetworkImage(
+          image: const NetworkImage(
             'https://images.unsplash.com/photo-1557683316-973673baf926',
           ),
           fit: BoxFit.cover,
-          opacity: Theme.of(context).brightness == Brightness.dark ? 0.05 : 0.1,
+          opacity: isDark ? 0.05 : 0.08,
         ),
       ),
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CircleAvatar(
-              radius: 80,
-              backgroundImage: AssetImage('assets/images/foto_profile.png'),
-            ).animate()
-              .fadeIn(duration: 600.ms)
-              .scale(delay: 200.ms),
-            const SizedBox(height: 20),
-            Text(
-              'Rysa Laksana',
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 2,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                      blurRadius: 20,
+                      spreadRadius: 5,
+                    ),
+                  ],
+                ),
+                child: CircleAvatar(
+                  radius: 90,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  backgroundImage: AssetImage(
+                    isDark 
+                        ? 'assets/images/foto_profile_dark.jpeg' 
+                        : 'assets/images/foto_profile.png',
+                  ),
+                ),
+              ).animate()
+                .fadeIn(duration: 800.ms)
+                .scale(delay: 200.ms, curve: Curves.easeOutBack),
+              
+              const SizedBox(height: 32),
+              
+              Text(
+                'Rysa Laksana',
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.5,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+              ).animate()
+                .fadeIn(duration: 600.ms, delay: 300.ms)
+                .slideY(begin: 0.3, end: 0, delay: 300.ms),
+                
+              const SizedBox(height: 16),
+              
+              DefaultTextStyle(
+                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontWeight: FontWeight.w600,
+                ),
+                child: AnimatedTextKit(
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                      'Flutter Developer',
+                      speed: const Duration(milliseconds: 80),
+                      cursor: '|',
+                    ),
+                    TypewriterAnimatedText(
+                      'Web Developer',
+                      speed: const Duration(milliseconds: 80),
+                      cursor: '|',
+                    ),
+                    TypewriterAnimatedText(
+                      'Mobile Developer',
+                      speed: const Duration(milliseconds: 80),
+                      cursor: '|',
+                    ),
+                    TypewriterAnimatedText(
+                      'Full Stack Developer',
+                      speed: const Duration(milliseconds: 80),
+                      cursor: '|',
+                    ),
+                     TypewriterAnimatedText(
+                      'Digital Creator',
+                      speed: const Duration(milliseconds: 80),
+                      cursor: '|',
+                    ),
+                  ],
+                  repeatForever: true,
+                  pause: const Duration(milliseconds: 1000),
+                ),
               ),
-            ).animate()
-              .fadeIn(duration: 600.ms)
-              .slideY(begin: 0.3, delay: 300.ms),
-            const SizedBox(height: 10),
-            DefaultTextStyle(
-              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                color: Colors.grey,
-              ),
-              child: AnimatedTextKit(
-                animatedTexts: [
-                  TypewriterAnimatedText(
-                    'Flutter Developer',
-                    speed: const Duration(milliseconds: 100),
-                  ),
-                  TypewriterAnimatedText(
-                    'Web Developer',
-                    speed: const Duration(milliseconds: 100),
-                  ),
-                   TypewriterAnimatedText(
-                    'Mobile Developer',
-                    speed: const Duration(milliseconds: 100),
-                  ),
-                   TypewriterAnimatedText(
-                    'Full Stack Developer',
-                    speed: const Duration(milliseconds: 100),
-                  ),
+              
+              const SizedBox(height: 48),
+              
+              Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                alignment: WrapAlignment.center,
+                children: [
+                  FilledButton.icon(
+                    onPressed: () async {
+                      final Uri url = Uri.parse(
+                          'https://drive.google.com/file/d/1LbzodLMWeKQlKFR4N8mRTcf7pcjuajJz/view?usp=sharing'
+                      );
+                      if (!await launchUrl(url)) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Could not download CV'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    icon: const Icon(Icons.download_rounded),
+                    label: const Text('Download CV'),
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 18,
+                      ),
+                    ),
+                  ).animate()
+                    .fadeIn(delay: 600.ms)
+                    .slideX(begin: -0.2, end: 0, delay: 600.ms),
+                    
+                  OutlinedButton.icon(
+                    onPressed: () async {
+                      final Uri url = Uri.parse(
+                          'https://wa.me/6283111778069?text=Hello%20Rysa%2C%20I%20want%20to%20ask%20about...'
+                      );
+                      if (!await launchUrl(url)) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Could not open WhatsApp'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    icon: const Icon(Icons.chat_bubble_outline_rounded),
+                    label: const Text('Contact Me'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 18,
+                      ),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 2,
+                      ),
+                    ),
+                  ).animate()
+                    .fadeIn(delay: 800.ms)
+                    .slideX(begin: 0.2, end: 0, delay: 800.ms),
                 ],
-                repeatForever: true,
               ),
-            ),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    final Uri url = Uri.parse(
-                        'https://drive.google.com/file/d/1LbzodLMWeKQlKFR4N8mRTcf7pcjuajJz/view?usp=sharing'
-                    );
-                    if (!await launchUrl(url)) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Could not download CV'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.download),
-                  label: const Text('Download CV'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 16,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                ).animate()
-                  .fadeIn(delay: 800.ms)
-                  .slideX(begin: -0.3, delay: 800.ms),
-                const SizedBox(width: 16),
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    final Uri url = Uri.parse(
-                        'https://wa.me/6283111778069?text=Hello%20Rysa%2C%20I%20want%20to%20ask%20about...'
-                    );
-                    if (!await launchUrl(url)) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Could not open WhatsApp'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.whatshot),
-                  label: const Text('Contact Me'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 16,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                ).animate()
-                  .fadeIn(delay: 800.ms)
-                  .slideX(begin: 0.3, delay: 800.ms),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
